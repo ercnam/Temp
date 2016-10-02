@@ -1,26 +1,27 @@
-package kr.co.mlec.jspboard.service;
+package kr.co.mlec.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.mlec.jspboard.BoardDAO;
-import kr.co.mlec.jspboard.BoardVO;
-import kr.co.mlec.jspboard.FileVO;
-import kr.co.mlec.jspboard.ReplyVO;
-import kr.co.mlec.jspboard.TestVO;
-import kr.co.mlec.member.Member;
+import kr.co.mlec.DAO.ThemeDAO;
+import kr.co.mlec.VO.ThemeVO;
 
-@Service("boardService")
-public class BoardServiceImpl implements BoardService
+@Service("scheduleService")
+public class ScheduleServiceImpl implements ScheduleService
 {
 	@Autowired
-	private BoardDAO dao;
+	private ThemeDAO themeDao;
 
-	public List<TestVO> testSelect()
+	public List<ThemeVO> selectAllTheme()
 	{
-		return dao.testSelect();
+		return themeDao.selectAllTheme();
+	}
+
+	public List<ThemeVO> selectOneTheme(int themeId)
+	{
+		return themeDao.selectOneTheme(themeId);
 	}
 	
 //	@Override

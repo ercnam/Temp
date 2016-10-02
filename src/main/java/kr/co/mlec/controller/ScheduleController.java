@@ -1,53 +1,39 @@
-package kr.co.mlec.jspboard.controller;
+package kr.co.mlec.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.servlet.ModelAndView;
 
-import kr.co.mlec.jspboard.BoardVO;
-import kr.co.mlec.jspboard.FileVO;
-import kr.co.mlec.jspboard.ReplyVO;
-import kr.co.mlec.jspboard.TestVO;
-import kr.co.mlec.jspboard.service.BoardService;
-import kr.co.mlec.jspboard.service.BoardServiceImpl;
+import kr.co.mlec.VO.ThemeVO;
+import kr.co.mlec.service.ScheduleService;
+import kr.co.mlec.service.ScheduleServiceImpl;
 
 @Controller//("kr.co.mlec.jspboard.controller.BoardController")
 //@RequestMapping("/jspboard")
-public class BoardController
+public class ScheduleController
 {
 	@Autowired
-	private BoardService service;
-	public BoardController()
+	private ScheduleService service;
+	public ScheduleController()
 	{
-		this.service = new BoardServiceImpl();
+		this.service = new ScheduleServiceImpl();
 	}
 	
-	@RequestMapping("/test.json")
+	@RequestMapping("/selectAllTheme.json")
 	@ResponseBody
-	public List<TestVO> testAjax()
-	{
-		List<TestVO> temp = service.testSelect();
-		System.out.println(temp.get(0).getStartDate());
-		return service.testSelect();
+	public List<ThemeVO> selectAllThemeAjax()
+	{		
+		return service.selectAllTheme();
+	}
+	
+	@RequestMapping("/selectOneTheme.json")
+	@ResponseBody
+	public List<ThemeVO> selectOneThemeAjax(int themeId)
+	{		
+		return service.selectOneTheme(themeId);
 	}
 	
 //	@RequestMapping("/writeReply.json")

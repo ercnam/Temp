@@ -8,7 +8,7 @@
 	
 	<!-- SQL의 결과를 담을 VO 객체들의 별칭을 설정하여 사용의 편의를 도모  -->
 	<typeAliases>
-		<typeAlias alias="test" type="kr.co.mlec.jspboard.TestVO" />
+		<typeAlias alias="theme" type="kr.co.mlec.VO.ThemeVO" />
 		<!-- <typeAlias alias="board" type="kr.co.mlec.jspboard.BoardVO" />
 		<typeAlias alias="file" type="kr.co.mlec.jspboard.FileVO" />
 		<typeAlias alias="reply" type="kr.co.mlec.jspboard.ReplyVO" />

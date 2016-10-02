@@ -10,18 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kr.co.mlec.jspboard.service.BoardService;
-import kr.co.mlec.jspboard.service.BoardServiceImpl;
 import kr.co.mlec.member.Member;
+import kr.co.mlec.service.ScheduleService;
+import kr.co.mlec.service.ScheduleServiceImpl;
 
 @Controller//("kr.co.mlec.login.controller.LoginController")
 public class LoginController
 {
 	@Autowired
-	private BoardService service;
+	private ScheduleService service;
 	public LoginController()
 	{
-		this.service = new BoardServiceImpl();
+		this.service = new ScheduleServiceImpl();
 	}
 	
 //	@RequestMapping("/login/login.do")

@@ -1,16 +1,12 @@
-package kr.co.mlec.jspboard.service;
+package kr.co.mlec.service;
 
 import java.util.List;
 
-import kr.co.mlec.jspboard.BoardVO;
-import kr.co.mlec.jspboard.FileVO;
-import kr.co.mlec.jspboard.ReplyVO;
-import kr.co.mlec.jspboard.TestVO;
-import kr.co.mlec.member.Member;
+import kr.co.mlec.VO.ThemeVO;
 
-public interface BoardService
+public interface ScheduleService
 {
-	public List<TestVO> testSelect();
+	public List<ThemeVO> selectAllTheme();
 //	/** 게시물의 목록정보를 조회하는 기능 */	 
 //	public List<BoardVO> list() throws Exception;	
 //	/** 댓글 삭제 처리 */
@@ -37,4 +33,6 @@ public interface BoardService
 //	public List<ReplyVO> replyList(int postNo) throws Exception;
 //	/** 회원 로그인 처리 */
 //	public Member loginUser(Member loginUser) throws Exception;
+
+	public List<ThemeVO> selectOneTheme(int themeId);
 }
