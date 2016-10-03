@@ -40,3 +40,19 @@ values ('카카오톡', '#462929', '#FFEB01', '#462929', '#FFC601', '#462929', '
 delete from schedule_theme; where theme_id = 1;
 /* 자동증가값 1 로 초기화 */
 ALTER TABLE schedule_theme AUTO_INCREMENT = 1;
+
+
+
+create table schedule_user
+(
+	user_no int primary key auto_increment,
+	user_id varchar(100) not null,
+	user_pass varchar(20),
+	user_cover_pass varcher(20),
+	user_phone_number varchar(13),
+	user_name varchar(30) not null,
+	user_cash int default 0,
+	theme_id int default 1
+);
+
+select * from schedule_user;

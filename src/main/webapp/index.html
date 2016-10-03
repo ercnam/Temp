@@ -18,6 +18,9 @@
 <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.0/css/font-awesome.css" />
 <!-- 컬러피커js -->
 <script src="js/jscolor.js"></script>
+<!-- class 속성 자체를 변경할수 있는 스크립트 -->
+<!-- changecss('속성변경할 클래스명', '변경할 속성', '변경된 속성'); -->
+<script type="text/javascript" src="http://www.shawnolson.net/scripts/public_smo_scripts.js"></script>
 <!-- 부가적인 테마 -->
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"> -->
 <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
@@ -312,6 +315,21 @@
 		white-space: nowrap;
 		overflow: auto;
 	}
+	/* 회원가입창 */
+	.joinbody{
+		text-align: center;
+	}
+	.joincenter{
+		width: 80%; height: 90%;
+		border: 5px solid white;
+		display: inline-block;
+		text-align: center;
+		padding: 30px 0 0 0;
+	}
+	#FBimage{
+		width: 30%; height: 30%;
+		display: inline-block;
+	}
 </style>
 </head>
 <body class="bordercolor-theme-light">
@@ -348,18 +366,45 @@
 	            <li><a href="#">Page 1-3</a></li>
 	          </ul>
 	        </li>
-	        <li><a href="#" class="fontcolor-theme-light" onclick="viewMonth()">월간 일정 보기</a></li>
-	        <li><a href="#" class="fontcolor-theme-light" onclick="viewWeek()">주간 일정 보기</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non" onclick="viewMonth()">월간 일정 보기</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non" onclick="viewWeek()">주간 일정 보기</a></li>
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#" class="fontcolor-theme-light" onclick="openCover()"><span class="fa fa-eye-slash fontcolor-theme-light"></span> 화면가리기</a></li>
-	        <li><a href="#" class="fontcolor-theme-light" data-toggle="modal" data-target="#configModal"><span class="fa fa-cog fontcolor-theme-light"></span> Config</a></li>
-	        <li><a href="#" class="fontcolor-theme-light"><span class="fa fa-user-plus fontcolor-theme-light"></span> Sign Up</a></li>
-	        <li><a href="#" class="fontcolor-theme-light"><span class="fa fa-sign-in fontcolor-theme-light"></span> Login</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non" onclick="openCover()"><span class="fa fa-eye-slash fontcolor-theme-light"></span> 화면가리기</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non" data-toggle="modal" data-target="#configModal"><span class="fa fa-cog fontcolor-theme-light"></span> Config</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non" data-toggle="modal" data-target="#joinModal"><span class="fa fa-user-plus fontcolor-theme-light"></span> Sign Up</a></li>
+	        <li><a href="#" class="fontcolor-theme-light non"><span class="fa fa-sign-in fontcolor-theme-light"></span> Login</a></li>
 	      </ul>
 	    </div>
 	  </div>
 	</nav>
+	
+	<!-- 회원가입 모달창 -->
+	<div class="modal fade" id="joinModal" role="dialog">
+	  <div class="modal-dialog">	    
+	    <!-- Modal content-->
+	    <div class="modal-content backcolor-theme-heavy bordercolor-theme-light">
+	      <div class="modal-header bordercolor-theme-light">
+	        <h4 class="modal-title fontcolor-theme-light">회원 가입</h4>
+	      </div>
+	      <div class="modal-body joinbody">
+	        <!-- 회원가입 모달창 내용 부분 -->
+	        <div class="joincenter fontcolor-theme-light">
+	        	페이스북으로부터 계정 얻어오기<br>
+	        	<div class="fb-login-button" scope="public_profile,email" data-max-rows="1" data-size="xlarge" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState();"></div>
+				<br>
+				<img alt="" src="" id="FBimage" /><br>
+				<div id="status">
+				</div>
+			</div>
+	      </div>
+	      <div class="modal-footer bordercolor-theme-light">
+	        <button type="button" class="btn btn-default backcolor-theme-heavy fontcolor-theme-light bordercolor-theme-light" data-dismiss="modal">확인</button>
+	        <button type="button" class="btn btn-default backcolor-theme-heavy fontcolor-theme-light bordercolor-theme-light" data-dismiss="modal">취소</button>
+	      </div>
+	    </div>	      
+	  </div>
+	</div>
 	
 	<!-- 설정 모달창 -->
 	<div class="modal fade" id="configModal" role="dialog">
@@ -748,7 +793,95 @@
 	  	</div>
 	  </div>
 	</div>
-<script type="text/javascript">	
+<script type="text/javascript">
+	/* 페이스북 로그인 처리 부분 */
+	/* (function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.7&appId=1570743826284569";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk')); */
+	// This is called with the results from from FB.getLoginStatus().
+	function statusChangeCallback(response) {
+		console.log('statusChangeCallback');
+	    console.log(response);
+	    // The response object is returned with a status field that lets the
+	    // app know the current login status of the person.
+	    // Full docs on the response object can be found in the documentation
+	    // for FB.getLoginStatus().
+	    if (response.status === 'connected') {
+	      // 페이스북 로그인 성공
+	      testAPI();
+	    } else if (response.status === 'not_authorized') {
+	      // 페이스북 로그아웃 앱
+	      document.getElementById('status').innerHTML = 'Please log ' +
+	        'into this app.';
+	    } else {
+	      // 페이스북 로그아웃
+	      $("#FBimage").toggle();
+	      document.getElementById('status').innerHTML = 'Please log ' +
+	        'into Facebook.';
+	    }
+	  }
+	
+	  // This function is called when someone finishes with the Login
+	  // Button.  See the onlogin handler attached to it in the sample
+	  // code below.
+	  function checkLoginState() {
+	    FB.getLoginStatus(function(response) {
+	      statusChangeCallback(response);
+	    });
+	  }
+	
+	  window.fbAsyncInit = function(){
+	  	FB.init({
+	    appId      : '1570743826284569',
+	    cookie     : true,  // enable cookies to allow the server to access 
+	                        // the session
+	    xfbml      : true,  // parse social plugins on this page
+	    version    : 'v2.5' // use graph api version 2.5
+	  });
+	
+	  // Now that we've initialized the JavaScript SDK, we call 
+	  // FB.getLoginStatus().  This function gets the state of the
+	  // person visiting this page and can return one of three states to
+	  // the callback you provide.  They can be:
+	  //
+	  // 1. Logged into your app ('connected')
+	  // 2. Logged into Facebook, but not your app ('not_authorized')
+	  // 3. Not logged into Facebook and can't tell if they are logged into
+	  //    your app or not.
+	  //
+	  // These three cases are handled in the callback function.
+	
+	  FB.getLoginStatus(function(response) {
+	    statusChangeCallback(response);
+	  });
+	
+	  };
+	
+	  // Load the SDK asynchronously
+	  (function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) return;
+	    js = d.createElement(s); js.id = id;
+	    js.src = "//connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	  }(document, 'script', 'facebook-jssdk'));
+	
+	  // Here we run a very simple test of the Graph API after login is
+	  // successful.  See statusChangeCallback() for when this call is made.
+	  function testAPI() {
+	    console.log('Welcome!  Fetching your information.... ');
+	    FB.api('/me', function(response) {
+	  		console.log('Successful login for: ' + response.name);
+	      	$("#FBimage").toggle();
+		  	$("#FBimage").attr("src", "http://graph.facebook.com/" + response.id + "/picture");
+	      	document.getElementById('status').innerHTML =
+	        'Thanks for logging in, ' + response.name + '!';
+	    });
+ 	}
 	/* 화면 가리개 접고 펴는 함수 */	
 	function openCover() {
 	    document.getElementById("myCloseCover").style.width = "100%";
@@ -981,8 +1114,6 @@
 				{
 					// 매칭되는 요일 컬러 클래스를 부여
 					$(".daydetail-head").addClass(weekColor[i]);
-					// 지워진 평일 클래스 바탕색 속성을 다시 부여
-					$(".midweek").css("background-color", $("#backcolor-light").css("background-color"));
 				}
 			}
 		}
@@ -1092,7 +1223,36 @@
 		var curThemeNum = 1;
 		for(var i = 0 ; i < curThemeNum ; i++)
 		{			
-			$(".fontcolor-theme-light").css("color", result[i].themeFontLight);
+			changecss(".fontcolor-theme-light", "color", result[i].themeFontLight);
+			changecss(".navbar-inverse .navbar-brand", "color", result[i].themeFontLight);
+			changecss(".navbar-inverse .navbar-nav > li > a", "color", result[i].themeFontLight);
+			changecss(".fontcolor-theme-heavy", "color", result[i].themeFontHeavy);
+			changecss(".backcolor-theme-light", "background-color", result[i].themeBackLight);
+			changecss(".backcolor-theme-heavy", "background-color", result[i].themeBackHeavy);
+			changecss(".bordercolor-theme-light", "border-color", result[i].themeBorderLight);
+			changecss(".bordercolor-theme-heavy", "border-color", result[i].themeBorderHeavy);
+			changecss(".bodycolor-theme", "background-color", result[i].themeDays);
+			changecss(".maincontent", "background-color", result[i].themeCalendar);
+			// 실제 컬러 선택창의 값과 색깔을 바꾸는 부분
+			$("#bordercolor-light")[0].value = result[i].themeBorderLight.replace("#", "");
+			$("#bordercolor-light").css("background-color", result[i].themeBorderLight);
+			$("#bordercolor-heavy")[0].value = result[i].themeBorderHeavy.replace("#", "");
+			$("#bordercolor-heavy").css("background-color", result[i].themeBorderHeavy);
+			$("#backcolor-light")[0].value = result[i].themeBackLight.replace("#", "");
+			$("#backcolor-light").css("background-color", result[i].themeBackLight);
+			changecss(".midweek", "background-color", result[i].themeBackLight);
+			$("#backcolor-heavy")[0].value = result[i].themeBackHeavy.replace("#", "");
+			$("#backcolor-heavy").css("background-color", result[i].themeBackHeavy);
+			$("#fontcolor-light")[0].value = result[i].themeFontLight.replace("#", "");
+			$("#fontcolor-light").css("background-color", result[i].themeFontLight);
+			$("#fontcolor-heavy")[0].value = result[i].themeFontHeavy.replace("#", "");
+			$("#fontcolor-heavy").css("background-color", result[i].themeFontHeavy);
+			$("#kancolor")[0].value = result[i].themeDays.replace("#", "");
+			$("#kancolor").css("background-color", result[i].themeDays);
+			$("#calcolor")[0].value = result[i].themeCalendar.replace("#", "");
+			$("#calcolor").css("background-color", result[i].themeCalendar);
+			
+			/* $(".fontcolor-theme-light").changecss("color", result[i].themeFontLight);
 			$(".fontcolor-theme-heavy").css("color", result[i].themeFontHeavy);
 			$(".backcolor-theme-light").css("background-color", result[i].themeBackLight);
 			$(".backcolor-theme-heavy").css("background-color", result[i].themeBackHeavy);
@@ -1117,7 +1277,7 @@
 			$("#kancolor")[0].value = result[i].themeDays.replace("#", "");
 			$("#kancolor").css("background-color", result[i].themeDays);
 			$("#calcolor")[0].value = result[i].themeCalendar.replace("#", "");
-			$("#calcolor").css("background-color", result[i].themeCalendar);
+			$("#calcolor").css("background-color", result[i].themeCalendar); */
 		}
 	}
 	/* 테마 고르면 해당 테마 정보를 DB에서 받아옴 */
@@ -1138,29 +1298,31 @@
 		switch(option)
 		{
 		case 'boli':
-			$(".bordercolor-theme-light").css("border-color", $("#bordercolor-light").css("background-color"));
+			changecss(".bordercolor-theme-light", "border-color", $("#bordercolor-light").css("background-color"));
 			break;
 		case 'bohe':
-			$(".bordercolor-theme-heavy").css("border-color", $("#bordercolor-heavy").css("background-color"));
+			changecss(".bordercolor-theme-heavy", "border-color", $("#bordercolor-heavy").css("background-color"));
 			break;
 		case 'bali':
-			$(".backcolor-theme-light").css("background-color", $("#backcolor-light").css("background-color"));
-			$(".midweek").css("background-color", $("#backcolor-light").css("background-color"));
+			changecss(".backcolor-theme-light", "background-color", $("#backcolor-light").css("background-color"));
+			changecss(".midweek", "background-color", $("#backcolor-light").css("background-color"));
 			break;
 		case 'bahe':
-			$(".backcolor-theme-heavy").css("background-color", $("#backcolor-heavy").css("background-color"));
+			changecss(".backcolor-theme-heavy", "background-color", $("#backcolor-heavy").css("background-color"));
 			break;
 		case 'foli':
-			$(".fontcolor-theme-light").css("color", $("#fontcolor-light").css("background-color"));
+			changecss(".fontcolor-theme-light", "color", $("#fontcolor-light").css("background-color"));
+			changecss(".navbar-inverse .navbar-brand", "color", $("#fontcolor-light").css("background-color"));
+			changecss(".navbar-inverse .navbar-nav > li > a", "color", $("#fontcolor-light").css("background-color"));
 			break;
 		case 'fohe':
-			$(".fontcolor-theme-heavy").css("color", $("#fontcolor-heavy").css("background-color"));
+			changecss(".fontcolor-theme-heavy", "color", $("#fontcolor-heavy").css("background-color"));
 			break;
 		case 'cady':
-			$(".bodycolor-theme").css("background-color", $("#kancolor").css("background-color"));
+			changecss(".bodycolor-theme", "background-color", $("#kancolor").css("background-color"));
 			break;
 		case 'caba':
-			$(".maincontent").css("background-color", $("#calcolor").css("background-color"));
+			changecss(".maincontent", "background-color", $("#calcolor").css("background-color"));
 			break;
 		}
 	}
