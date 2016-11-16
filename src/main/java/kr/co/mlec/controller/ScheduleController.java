@@ -4,10 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.mlec.VO.ThemeVO;
+import kr.co.mlec.VO.UserVO;
 import kr.co.mlec.service.ScheduleService;
 import kr.co.mlec.service.ScheduleServiceImpl;
 
@@ -36,6 +40,29 @@ public class ScheduleController
 		return service.selectOneTheme(themeId);
 	}
 	
+	@RequestMapping("/isDuplicate.json")
+	@ResponseBody
+	public String isDuplicateAjax(String userId)
+	{
+		String msg = "";
+		if(service.isDuplicate(userId) != null)
+		{
+			msg = "Duplicated";
+		}
+		System.out.println(msg);
+		return msg;
+	}
+	
+	@RequestMapping("/join.json")
+	@ResponseBody
+	public String joinAjax(UserVO user)
+	{
+		System.out.println(user.getUserId());
+		System.out.println(user.getUserName());
+		System.out.println(user.toString());		
+		service.join(user);
+		return "SUCCESS";
+	}
 //	@RequestMapping("/writeReply.json")
 //	@ResponseBody
 //	public List<ReplyVO> writeReplyAjax(int postNo, ReplyVO rVO) throws Exception, IOException

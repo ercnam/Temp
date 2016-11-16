@@ -27,4 +27,14 @@ public class UserDAO
 		list.add((UserVO) sqlSessionTemplate.selectOne("kr.co.mlec.UserDAO.selectOneUser", themeId));
 		return list;
 	}
+
+	public UserVO isDuplicate(String userId)
+	{
+		return sqlSessionTemplate.selectOne("kr.co.mlec.UserDAO.isDuplicate", userId);
+	}
+
+	public void join(UserVO user)
+	{
+		sqlSessionTemplate.insert("kr.co.mlec.UserDAO.join", user);
+	}
 }

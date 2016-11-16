@@ -3,6 +3,7 @@ package kr.co.mlec.service;
 import java.util.List;
 
 import kr.co.mlec.VO.ThemeVO;
+import kr.co.mlec.VO.UserVO;
 
 public interface ScheduleService
 {
@@ -35,4 +36,8 @@ public interface ScheduleService
 //	public Member loginUser(Member loginUser) throws Exception;
 
 	public List<ThemeVO> selectOneTheme(int themeId);
+
+	public UserVO isDuplicate(String userId);
+
+	public void join(UserVO user);
 }

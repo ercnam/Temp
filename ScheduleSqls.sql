@@ -48,11 +48,21 @@ create table schedule_user
 	user_no int primary key auto_increment,
 	user_id varchar(100) not null,
 	user_pass varchar(20),
-	user_cover_pass varcher(20),
+	user_cover_pass varchar(20) default 'N',
 	user_phone_number varchar(13),
+	user_api varchar(10) default 'Y',
 	user_name varchar(30) not null,
 	user_cash int default 0,
 	theme_id int default 1
 );
 
 select * from schedule_user;
+
+drop table schedule_user;
+
+insert into schedule_user (user_id, user_name) values ('qwerty', 'names');
+
+insert into schedule_user
+(user_no, user_id, user_pass, user_cover_pass, user_phone_number, user_name, user_cash, theme_id)
+values
+(null, 'eeee', '', default, null, 'gggggg', 0, 0);

@@ -29,6 +29,17 @@
 		from schedule_theme
 		where user_no = #{themeId}
 	</select>
+	<select id="isDuplicate" resultType="user" parameterType="string">
+		select user_id as userId
+		from schedule_user
+		where user_id = #{userId}
+	</select>
+	<insert id="join" parameterType="user">
+		insert into schedule_user
+		(user_id, user_pass, user_api, user_name)
+		values
+		(#{userId}, #{userPass}, #{userApi}, #{userName})
+	</insert>
 	<!-- 게시물 삭제 -->
 	<!-- 반환값 int 0 : 실패 , 1: 성공 -->
 	<!-- <delete id="deleteBoard" parameterType="int">

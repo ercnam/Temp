@@ -6,22 +6,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.mlec.DAO.ThemeDAO;
+import kr.co.mlec.DAO.UserDAO;
 import kr.co.mlec.VO.ThemeVO;
+import kr.co.mlec.VO.UserVO;
 
 @Service("scheduleService")
 public class ScheduleServiceImpl implements ScheduleService
 {
 	@Autowired
-	private ThemeDAO themeDao;
+	private ThemeDAO themeDAO;
+	@Autowired
+	private UserDAO userDAO;
 
 	public List<ThemeVO> selectAllTheme()
 	{
-		return themeDao.selectAllTheme();
+		return themeDAO.selectAllTheme();
 	}
 
 	public List<ThemeVO> selectOneTheme(int themeId)
 	{
-		return themeDao.selectOneTheme(themeId);
+		return themeDAO.selectOneTheme(themeId);
+	}
+
+	public UserVO isDuplicate(String userId)
+	{
+		return userDAO.isDuplicate(userId);
+	}
+
+	public void join(UserVO user)
+	{
+		userDAO.join(user);		
 	}
 	
 //	@Override

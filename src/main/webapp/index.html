@@ -316,12 +316,15 @@
 		overflow: auto;
 	}
 	/* 회원가입창 */
+	.modal-content{
+		height: 800px;
+	}
 	.joinbody{
 		text-align: center;
+		height: 85%;
 	}
 	.joincenter{
-		width: 80%; height: 90%;
-		border: 5px solid white;
+		width: 80%; height: 100%;
 		display: inline-block;
 		text-align: center;
 		padding: 30px 0 0 0;
@@ -329,6 +332,29 @@
 	#FBimage{
 		width: 30%; height: 30%;
 		display: inline-block;
+	}
+	.signupinner{
+		width: 70%;
+		text-align: left;
+		display: inline-block;
+	}
+	.form-control{
+		display: inline-block;
+	}
+	.redstar{
+		color: red;
+		font-size: 20px;
+		position: relative;
+		top: 7px;		
+	}
+	.apihidden{
+		display: none;
+	}
+	input::-webkit-input-placeholder{ /* WebKit, Blink, Edge */
+    	opacity: 1;
+	}
+	.alert{
+		display: none;
 	}
 </style>
 </head>
@@ -395,11 +421,24 @@
 				<br>
 				<img alt="" src="" id="FBimage" /><br>
 				<div id="status">
-				</div>
+				</div><br>
+				<div class="signupinner">
+					<div class="apihidden">
+						<span class="fa fa-user"></span> 아이디 <span class="redstar">*</span><br><input type="text" id="inputid" class="form-control chkInput" placeholder="아이디를 입력하세요" />
+						<span class="fa fa-key"></span> 비밀번호 <span class="redstar">*</span><br><input type="password" id="inputpass" class="form-control chkInput" placeholder="비밀번호를 입력하세요" />
+						<span class="fa fa-key"></span> 비밀번호 확인 <span class="redstar">*</span><br><input type="password" id="verifypass" class="form-control chkInput" placeholder="비밀번호를 확인하세요" />
+					</div>
+					<span class="fa fa-eye-slash"></span> 잠금해제 번호<br><input style="color: black;" type="password" id="inputcover" class="form-control" placeholder="필요하다면, 화면 잠금해제 번호를 입력합니다" />
+					<span class="fa fa-mobile"></span> 핸드폰 번호<br><input type="text" id="inputphone" class="form-control" placeholder="필수는 아닙니다" />
+					<span class="fa fa-pencil"></span> 이름 <span class="redstar">*</span><br><input type="text" id="inputname" class="form-control chkInput" placeholder="일정관리에 사용될 유저 이름을 입력" />
+					<span class="fa fa-credit-card"></span> 금액 <br><input type="text" id="inputcash" class="form-control" placeholder="금전관리용 금액을 입력. 생략시 0원" />
+					<br><br><div class="alert alert-danger" role="alert"></div>
+					<div class="alert alert-success" role="alert"></div>
+				</div>				
 			</div>
 	      </div>
 	      <div class="modal-footer bordercolor-theme-light">
-	        <button type="button" class="btn btn-default backcolor-theme-heavy fontcolor-theme-light bordercolor-theme-light" data-dismiss="modal">확인</button>
+	        <button type="button" class="btn btn-default backcolor-theme-heavy fontcolor-theme-light bordercolor-theme-light" data-dismiss="modal" onclick="confirmJoin();" id="confirmbtn">회원가입</button>
 	        <button type="button" class="btn btn-default backcolor-theme-heavy fontcolor-theme-light bordercolor-theme-light" data-dismiss="modal">취소</button>
 	      </div>
 	    </div>	      
@@ -795,13 +834,15 @@
 	</div>
 <script type="text/javascript">
 	/* 페이스북 로그인 처리 부분 */
-	/* (function(d, s, id) {
-			  var js, fjs = d.getElementsByTagName(s)[0];
-			  if (d.getElementById(id)) return;
-			  js = d.createElement(s); js.id = id;
-			  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.7&appId=1570743826284569";
-			  fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk')); */
+	var userId;
+	var userPass;
+	var userCoverPass;
+	var userPhoneNumber;
+	var userNickName;
+	var userApi = "N";
+	var userTheme;
+	var userCash;
+	var isChked = false;
 	// This is called with the results from from FB.getLoginStatus().
 	function statusChangeCallback(response) {
 		console.log('statusChangeCallback');
@@ -818,10 +859,16 @@
 	      document.getElementById('status').innerHTML = 'Please log ' +
 	        'into this app.';
 	    } else {
-	      // 페이스북 로그아웃
-	      $("#FBimage").toggle();
-	      document.getElementById('status').innerHTML = 'Please log ' +
-	        'into Facebook.';
+	    	// 페이스북 로그아웃
+	    	$("#FBimage").hide();
+	    	$(".apihidden").show();
+	    	document.getElementById('status').innerHTML = "페이스북으로 로그인하면<br> 따로 아이디와 비밀번호를 입력할 필요가 없습니다";
+	    	$("#confirmbtn").attr("disabled", true);
+	   		// 페이스북 측에서 오는 정보로 회원정보 부분을 채워넣음
+	      	userId = "";
+	      	userName = "";
+	      	userApi = "N";
+	      	userTheme = 1; // 일반 테마로 지정	      
 	    }
 	  }
 	
@@ -829,7 +876,7 @@
 	  // Button.  See the onlogin handler attached to it in the sample
 	  // code below.
 	  function checkLoginState() {
-	    FB.getLoginStatus(function(response) {
+	  	FB.getLoginStatus(function(response) {
 	      statusChangeCallback(response);
 	    });
 	  }
@@ -855,10 +902,10 @@
 	  //
 	  // These three cases are handled in the callback function.
 	
-	  FB.getLoginStatus(function(response) {
-	    statusChangeCallback(response);
+	  FB.getLoginStatus(function(response)
+	  {
+		  statusChangeCallback(response);
 	  });
-	
 	  };
 	
 	  // Load the SDK asynchronously
@@ -870,19 +917,131 @@
 	    fjs.parentNode.insertBefore(js, fjs);
 	  }(document, 'script', 'facebook-jssdk'));
 	
-	  // Here we run a very simple test of the Graph API after login is
-	  // successful.  See statusChangeCallback() for when this call is made.
+	  // 로그인 성공시 들어오는 부분
 	  function testAPI() {
 	    console.log('Welcome!  Fetching your information.... ');
 	    FB.api('/me', function(response) {
 	  		console.log('Successful login for: ' + response.name);
-	      	$("#FBimage").toggle();
+	      	$("#FBimage").show();
+	      	$(".apihidden").hide();
 		  	$("#FBimage").attr("src", "http://graph.facebook.com/" + response.id + "/picture");
-	      	document.getElementById('status').innerHTML =
-	        'Thanks for logging in, ' + response.name + '!';
+	      	document.getElementById('status').innerHTML = response.name + " 님, 접속 성공";
+	      	$("#confirmbtn").attr("disabled", false);
+	      	// 페이스북 측에서 오는 정보로 회원정보 부분을 채워넣음
+	      	userId = response.id;
+	      	$("#inputname")[0].value = userName = response.name;
+	      	userApi = "Y";
+	      	userTheme = 3; // 페이스북 테마로 지정
 	    });
  	}
-	/* 화면 가리개 접고 펴는 함수 */	
+	/* 회원가입 정보 입력 벨리데이션 체크 부분 */
+	$(".chkInput").change(function(){
+		chkJoin();
+	});
+	$("#inputid").change(function(){
+		console.log("mod");
+		if($("#inputid")[0].value == "")
+		{
+			isChked = true;
+		}else{
+			isChked = false;			
+		}
+		chkJoin();
+	});
+	function chkJoin()
+	{
+		userId = $("#inputid")[0].value;
+		userPass = $("#inputpass")[0].value;
+		var userVeriPass = $("#verifypass")[0].value;
+		userCoverPass = $("#inputcover")[0].value;
+		userPhoneNumber = $("#inputphone")[0].value;
+		userName = $("#inputname")[0].value;
+		userCash = $("#inputcash")[0].value;
+		$(".alert-success").hide();
+		$(".alert-success").html("");
+		if(userApi == "N")
+		{			
+			$("#confirmbtn").attr("disabled", true);
+			// 유저 아이디 중복확인 작업
+			if(!isChked)
+			{
+				$.ajax({
+					url: "../BitSchedule/isDuplicate.json",
+					data: {userId: userId},
+					dataType: "json"
+				})
+				.done(function(result){
+					console.log(result);
+					if(result == "")
+					{
+						$(".alert-success").show();
+						$(".alert-success").html("사용가능한 ID입니다");
+						isChked = true;
+					}else{
+						$(".alert-success").hide();
+						$(".alert-danger").show();
+						$(".alert-danger").html("이미 같은 ID가 있습니다");
+						$("#confirmbtn").attr("disabled", true);
+						return false;
+					}
+				});
+			}
+			// 유저 암호와 암호확인 매칭작업
+			if(userPass != "" && userVeriPass != "" && userPass != userVeriPass)
+			{
+				// 비번 불일치 경고문 출력
+				$(".alert-danger").show();
+				$(".alert-danger").html("비밀번호가 일치하지 않습니다");
+				$("#verifypass")[0].value = "";
+				$("#confirmbtn").attr("disabled", true);
+				return false;
+			}
+			else
+			{
+				$(".alert-danger").hide();
+				$(".alert-danger").html("");
+				$("#confirmbtn").attr("disabled", false);
+			}
+			// 필수 정보를 모두 입력했을 경우
+			if(userId != "" && userPass != "" && userVeriPass != "" &&  userName != "")
+			{	
+				$("#confirmbtn").attr("disabled", false);
+			}
+			else{ $("#confirmbtn").attr("disabled", true); return false; }
+		}
+		// API 로 로그인하여 가입
+		else if(userApi == "Y")
+		{
+			// 간소화된 필수 정보를 모두 입력했을 경우
+			if(userName != "")
+			{
+				$("#confirmbtn").attr("disabled", false);
+			}else{ $("#confirmbtn").attr("disabled", true); return false; }
+		}
+		return true;
+	}
+	/* 회원가입 버튼 누르는 부분 */
+	function confirmJoin()
+	{
+		console.log(userId);
+		console.log(userPass);
+		console.log(userCoverPass);
+		console.log(userPhoneNumber);
+		console.log(userApi);
+		console.log(userName);
+		console.log(userCash);
+		$.ajax({
+			url: "../BitSchedule/join.json",
+			type: "POST",
+			data: {"userId": userId, "userPass": userPass, "userApi": userApi, "userName": userName},
+			dataType: "json"
+		})
+		.done(function(result){
+			console.log(result);
+		});
+	}
+	/* 화면 가리개 접고 펴는 함수 */
+	var reqCoverPass;
 	function openCover() {
 	    document.getElementById("myCloseCover").style.width = "100%";
 	}	
